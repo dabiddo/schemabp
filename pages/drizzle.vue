@@ -2,7 +2,7 @@
 <template>
   <div>
     <textarea v-model="jsonLdInput"></textarea>
-    <button @click="generateDrizzleCode">Generate Prisma Code</button>
+    <button @click="generateDrizzleCode">Generate Drizzle Code</button>
     <pre>{{ drizzleCode }}</pre>
   </div>
 </template>
