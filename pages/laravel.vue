@@ -3,7 +3,10 @@
   <div>
     <textarea v-model="jsonLdInput"></textarea>
     <button @click="generateLaravelCode">Generate Laravel Code</button>
-    <pre>{{ laravelCode }}</pre>
+    <div v-for="(code, index) in laravelCode" :key="index">
+      <pre>{{ code.model }}</pre>
+      <pre>{{ code.migration }}</pre>
+    </div>
   </div>
 </template>
 
@@ -12,7 +15,7 @@ import { ref } from 'vue'
 import { useSchemaBP } from '~/composables/useSchemaBP'
 
 const jsonLdInput = ref('')
-const laravelCode = ref('')
+const laravelCode = ref([])
 
 const generateLaravelCode = () => {
   const parsedJsonLd = JSON.parse(jsonLdInput.value)
