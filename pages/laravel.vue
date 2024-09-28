@@ -20,3 +20,16 @@ const generateLaravelCode = () => {
   laravelCode.value = toLaravelCode()
 }
 </script>
+<style scoped>
+textarea {
+  width: 100%;
+  height: 200px;
+  margin-bottom: 10px;
+}
+
+pre {
+  background: #f4f4f4;
+  padding: 10px;
+  border: 1px solid #ddd;
+}
+</style>
