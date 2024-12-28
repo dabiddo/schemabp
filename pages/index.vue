@@ -13,6 +13,14 @@
         </tr>
         <tr>
           <td>
+            <NuxtLink to="/phpdto">
+              Json2PhpDto
+            </NuxtLink>
+          </td>
+          <td>Convert Json / Json-LD to PHP DTO Class</td>
+        </tr>
+        <tr>
+          <td>
             <NuxtLink to="/drizzle">
               Json2Drizzle
             </NuxtLink>
@@ -33,7 +41,9 @@
     <table border="2" bg="#efefef">
       <tbody>
         <tr>
-          <td><NuxtLink to="sqllaravel">Sql2Laravel</NuxtLink></td>
+          <td>
+            <NuxtLink to="sqllaravel">Sql2Laravel</NuxtLink>
+          </td>
           <td>Converts a Sql Table definition to Laravel migration & model</td>
         </tr>
       </tbody>

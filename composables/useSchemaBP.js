@@ -5,9 +5,10 @@ export const useSchemaBP = (parsedJsonLd) => {
   const schemabp = new SchemaBP(parsedJsonLd)
 
   const toLaravelCode = () => schemabp.toLaravelCode()
+  const toPhpDtoCode = () => schemabp.toPhpDtoCode()
   const toPrismaCode = () => schemabp.toPrismaCode()
   const toDrizzleCode = () => schemabp.toDrizzleCode()
   const sqlToLaravelCode = () => schemabp.sqlToLaravelCode()
 
-  return { toLaravelCode, toPrismaCode, toDrizzleCode, sqlToLaravelCode }
+  return { toLaravelCode, toPhpDtoCode, toPrismaCode, toDrizzleCode, sqlToLaravelCode }
 }
