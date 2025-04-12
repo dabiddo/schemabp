@@ -1,6 +1,12 @@
 {
-    "name":"schemabp",
-    "build": { "dockerfile": "Dockerfile" },
+	"name": "schemabp",
+	"build": {
+		"dockerfile": "Dockerfile"
+	},
+	"features": {
+		"ghcr.io/devcontainers/features/git:1": {},
+		"ghcr.io/devcontainers/features/sshd:1": {}
+	},
 	"forwardPorts": [
 		3000
 	],
@@ -12,5 +18,6 @@
 				"exer7um.vue-3-vscode-snippets"
 			]
 		}
-	}
+	},
+	"remoteUser": "node"
 }
