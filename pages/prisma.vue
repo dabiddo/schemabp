@@ -1,7 +1,7 @@
 <!-- pages/index.vue -->
 <template>
   <div>
-    <textarea v-model="jsonLdInput"></textarea>
+    <textarea v-model="jsonLdInput" rows="10" cols="90"></textarea>
     <button @click="generatePrismaCode">Generate Prisma Code</button>
     <pre>{{ prismaCode }}</pre>
   </div>

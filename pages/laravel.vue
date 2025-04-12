@@ -1,7 +1,7 @@
 <!-- pages/index.vue -->
 <template>
   <div>
-    <textarea v-model="jsonLdInput"></textarea>
+    <textarea v-model="jsonLdInput" rows="10" cols="90"></textarea>
     <button @click="generateLaravelCode">Generate Laravel Code</button>
     <div v-for="(code, index) in laravelCode" :key="index">
       <pre>{{ code.model }}</pre>

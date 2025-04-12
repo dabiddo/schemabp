@@ -15,7 +15,7 @@ const generateLaravelCode = () => {
 <template>
   <div>
     <!-- No `.value` needed on `v-model` for refs -->
-    <textarea v-model="sqlCreateTable" placeholder="Enter CREATE TABLE SQL here"></textarea>
+    <textarea v-model="sqlCreateTable" placeholder="Enter CREATE TABLE SQL here" rows="10" cols="90"></textarea>
     <button @click="generateLaravelCode">Generate Laravel Migration and Model</button>
     <div v-for="(code, index) in laravelCode" :key="index">
       <pre>{{ code.model }}</pre>
