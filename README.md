@@ -1,75 +1,28 @@
-# Nuxt 3 Minimal Starter
+# JSON/SQL Schema Converter
 
-Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+A simple web-based tool to convert between different schema formats. Built with Nuxt 3.
 
-## Setup
+## What it does
 
-Make sure to install the dependencies:
+Converts between:
+- JSON-LD → Laravel (Migrations & Models)
+- JSON-LD → PHP DTOs
+- JSON-LD → Drizzle ORM Schemas
+- JSON-LD → Prisma Schemas
+- SQL → Laravel (Migrations & Models)
+
+## Important Note
+
+This is a side project built for fun and personal use. While it works for basic conversions, there's no official support or guarantees. Feel free to:
+- Use it if it helps
+- Submit PRs if you want to improve something
+- Fork it and make it your own
+
+## Local Development
 
 ```bash
-# npm
-npm install
-
-# pnpm
+# Install dependencies
 pnpm install
 
-# yarn
-yarn install
-
-# bun
-bun install
-```
-
-## Development Server
-
-Start the development server on `http://localhost:3000`:
-
-```bash
-# npm
-npm run dev
-
-# pnpm
-pnpm run dev
-
-# yarn
-yarn dev
-
-# bun
-bun run dev
-```
-
-## Production
-
-Build the application for production:
-
-```bash
-# npm
-npm run build
-
-# pnpm
-pnpm run build
-
-# yarn
-yarn build
-
-# bun
-bun run build
-```
-
-Locally preview production build:
-
-```bash
-# npm
-npm run preview
-
-# pnpm
-pnpm run preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
-```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+# Run dev server
+pnpm dev
