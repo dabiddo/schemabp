@@ -1,6 +1,4 @@
-
-import tailwindcss from "@tailwindcss/vite";
-// https://nuxt.com/docs/api/configuration/nuxt-config
+// nuxt.config.ts
 export default defineNuxtConfig({
   compatibilityDate: '2024-04-03',
   devtools: { enabled: true },
@@ -13,6 +11,8 @@ export default defineNuxtConfig({
     '~/assets/css/main.css'
   ],
   app: {
+    baseURL: '/schemabp/',
+    buildAssetsDir: 'assets',
     head: {
       link: [
         {
@@ -20,6 +20,13 @@ export default defineNuxtConfig({
           href: 'https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap',
         }
       ]
+    }
+  },
+  ssr: false,
+  nitro: {
+    prerender: {
+      crawlLinks: true,
+      routes: ['/']
     }
   }
 })
