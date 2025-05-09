@@ -1,12 +1,12 @@
 import BaseGenerator from './BaseGenerator'
 import { toSnakeCase, toPascalCase } from '../utils'
 
-export default class PhpDtoGenerator extends BaseGenerator {
-    constructor(parsedJsonLd) {
+export default class PhpDtoGenerator extends BaseGenerator<string[]> {
+    constructor(parsedJsonLd: Record<string, any>) {
         super(parsedJsonLd)
     }
 
-    generateCode() {
+    override generateCode(): string[] {
         const models = this.parseJsonLd(this.parsedJsonLd);
         const classes = [];
 
@@ -14,18 +14,18 @@ export default class PhpDtoGenerator extends BaseGenerator {
             const pascalCaseModel = toPascalCase(model);
 
             // Generate properties
-            const properties = fields.map(field => `public ?string $${field};`).join("\n    ");
+            const properties = (fields as string[]).map(field => `public ?string $${field};`).join("\n    ");
 
             // Generate constructor arguments
-            const constructorArgs = fields.map(field => `?string $${field} = null`).join(",\n        ");
+            const constructorArgs = (fields as string[]).map(field => `?string $${field} = null`).join(",\n    ");
 
             // Generate constructor body
-            const constructorBody = fields.map(field => `        $this->${field} = $${field};`).join("\n");
+            const constructorBody = (fields as string[]).map(field => `    $this->${field} = $${field};`).join("\n");
 
             // Generate fromArray assignments
-            const fromArrayAssignments = fields
+            const fromArrayAssignments = (fields as string[])
                 .map(field => `$data['${field}'] ?? null`)
-                .join(",\n            ");
+                .join(",\n    ");
 
             // Build the DTO class template
             const DtoClass = `<?php
@@ -60,10 +60,10 @@ export default class PhpDtoGenerator extends BaseGenerator {
     }
 
     // Function to parse JSON-LD and return fields (same as before)
-    parseJsonLd(jsonLd) {
-        const models = new Map();
+    parseJsonLd(jsonLd: Record<string, any>): Record<string, string[]> {
+        const models = new Map<string, string[]>();
 
-        const parseNode = (node, parentName) => {
+        const parseNode = (node: any, parentName?: string): void => {
             if (typeof node === 'object' && !Array.isArray(node)) {
                 const nodeType = node['@type'];
                 if (nodeType) {
@@ -73,7 +73,7 @@ export default class PhpDtoGenerator extends BaseGenerator {
                         if (key !== '@type' && key !== '@context') {
                             const snakeCaseKey = toSnakeCase(key);
                             const properties = models.get(modelName);
-                            if (!properties.includes(snakeCaseKey)) {
+                            if (properties && !properties.includes(snakeCaseKey)) {
                                 properties.push(snakeCaseKey);
                             }
                             parseNode(node[key], modelName);

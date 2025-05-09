@@ -1,9 +1,14 @@
-<script setup>
+<script setup lang="ts">
 import { ref } from 'vue';
 import { useSchemaBP } from '~/composables/useSchemaBP'
 
+interface ModelOutput {
+  model: string;
+  migration: string;
+}
+
 const sqlCreateTable = ref('');
-const laravelCode = ref([]);
+const laravelCode = ref<ModelOutput[]>([]);
 
 const generateLaravelCode = () => {
   const { sqlToLaravelCode } = useSchemaBP(sqlCreateTable.value);
