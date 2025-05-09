@@ -1,13 +1,18 @@
-// lib/generators/DrizzleGenerator.js
+// lib/generators/DrizzleGenerator.ts
 import BaseGenerator from './BaseGenerator';
 import { toPascalCase } from '../utils';
 
+interface Field {
+    name: string;
+    type: string;
+}
+
 export default class DrizzleGenerator extends BaseGenerator {
-    constructor(parsedJsonLd) {
+    constructor(parsedJsonLd: Record<string, any>) {
         super(parsedJsonLd);
     }
 
-    generateCode() {
+    override generateCode(): string {
         let drizzleCode = '';
 
         // Start by generating the main table
@@ -19,7 +24,7 @@ export default class DrizzleGenerator extends BaseGenerator {
         return drizzleCode;
     }
 
-    generateTable(parsedJson) {
+    generateTable(parsedJson: Record<string, any>): string {
         const tableName = this.generateTableName(parsedJson['@type'] || 'default_table');
         const fields = this.extractFields(parsedJson);
 
@@ -30,7 +35,7 @@ export default class DrizzleGenerator extends BaseGenerator {
     `;
 
         // Add fields to the table schema
-        fields.forEach(field => {
+        fields.forEach((field: Field) => {
             tableCode += `        ${field.name}: ${field.type}(),\n`;
         });
 
@@ -40,14 +45,14 @@ export default class DrizzleGenerator extends BaseGenerator {
         return tableCode;
     }
 
-    handleNestedStructures(parsedJson) {
+    handleNestedStructures(parsedJson: Record<string, any>): string {
         let nestedSchemas = '';
 
         for (const key in parsedJson) {
             const value = parsedJson[key];
             if (Array.isArray(value)) {
                 // Handle array of objects
-                value.forEach(item => {
+                value.forEach((item: any) => {
                     if (typeof item === 'object') {
                         nestedSchemas += this.generateTable(item);
                     }
@@ -60,7 +65,7 @@ export default class DrizzleGenerator extends BaseGenerator {
         return nestedSchemas;
     }
 
-    extractFields(parsedJson) {
+    extractFields(parsedJson: Record<string, any>): Field[] {
         return Object.entries(parsedJson).map(([key, value]) => {
             if (key.startsWith('@')) {
                 return null; // Skip JSON-LD specific fields
@@ -70,10 +75,10 @@ export default class DrizzleGenerator extends BaseGenerator {
                 name: toPascalCase(key),
                 type: this.determineType(value)
             };
-        }).filter(Boolean); // Remove nulls
+        }).filter(Boolean) as Field[]; // Remove nulls
     }
 
-    determineType(value) {
+    determineType(value: any): string {
         if (Array.isArray(value)) {
             return 'text'; // Arrays will be simplified to text for now
         }
@@ -89,7 +94,7 @@ export default class DrizzleGenerator extends BaseGenerator {
         }
     }
 
-    generateTableName(type) {
+    generateTableName(type: string): string {
         return toPascalCase(type);
     }
 }
