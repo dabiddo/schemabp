@@ -1,16 +1,33 @@
 import BaseGenerator from './BaseGenerator';
 import { toSnakeCase, toPascalCase } from '../utils';
 
-export default class SqlLaravelGenerator extends BaseGenerator {
-    constructor(sqlCreateTable) {
-        super(sqlCreateTable);
+interface Column {
+    name: string;
+    type: string;
+    length: string | null;
+    nullable: boolean;
+    unique: boolean;
+}
+
+interface ModelOutput {
+    model: string;
+    migration: string;
+}
+
+export default class SqlLaravelGenerator extends BaseGenerator<ModelOutput[]> {
+    private sqlCreateTable: string;
+
+    constructor(sqlCreateTable: string) {
+        super({ sql: sqlCreateTable });
         this.sqlCreateTable = sqlCreateTable;
     }
 
-    generateCode() {
-        const tableName = this.getTableName(this.sqlCreateTable);
-        const columns = this.getColumns(this.sqlCreateTable);
-        const generatedCodeArray = [];
+    override generateCode(sql?: string): ModelOutput[] {
+        const sqlToUse = sql || this.sqlCreateTable;
+
+        const tableName = this.getTableName(sqlToUse);
+        const columns = this.getColumns(sqlToUse);
+        const generatedCodeArray: ModelOutput[] = [];
 
         const migrationOutput = this.createLaravelMigration(tableName, columns);
         const modelOutput = this.createLaravelModel(tableName, columns);
@@ -23,13 +40,13 @@ export default class SqlLaravelGenerator extends BaseGenerator {
         return generatedCodeArray;
     }
 
-    getTableName(sql) {
+    getTableName(sql: string): string {
         const match = sql.match(/CREATE TABLE\s+`?(\w+)`?/i);
         return match ? match[1] : 'unknown_table';
     }
 
-    getColumns(sql) {
-        const columns = [];
+    getColumns(sql: string): Column[] {
+        const columns: Column[] = [];
         // Remove comments and normalize whitespace
         const cleanSql = sql.replace(/--.*$/gm, '').replace(/\s+/g, ' ');
 
@@ -66,8 +83,8 @@ export default class SqlLaravelGenerator extends BaseGenerator {
         return columns;
     }
 
-    mapColumnToLaravelField(column) {
-        const typeMap = {
+    mapColumnToLaravelField(column: Column): string {
+        const typeMap: Record<string, string> = {
             int: 'integer',
             bigint: 'bigInteger',
             varchar: 'string',
@@ -98,7 +115,7 @@ export default class SqlLaravelGenerator extends BaseGenerator {
         return fieldDefinition;
     }
 
-    createLaravelMigration(tableName, columns) {
+    createLaravelMigration(tableName: string, columns: Column[]): string {
         let migration = `<?php\n\nuse Illuminate\\Database\\Migrations\\Migration;\nuse Illuminate\\Database\\Schema\\Blueprint;\nuse Illuminate\\Support\\Facades\\Schema;\n\n`;
         migration += `return new class extends Migration {\n  public function up()\n  {\n    Schema::create('${tableName}', function (Blueprint $table) {\n`;
         migration += `      $table->id();\n`;
@@ -114,7 +131,7 @@ export default class SqlLaravelGenerator extends BaseGenerator {
         return migration;
     }
 
-    createLaravelModel(tableName, columns) {
+    createLaravelModel(tableName: string, columns: Column[]): string {
         let model = `<?php\n\nnamespace App\\Models;\n\nuse Illuminate\\Database\\Eloquent\\Factories\\HasFactory;\nuse Illuminate\\Database\\Eloquent\\Model;\n\n`;
         model += `class ${this.toStudlyCase(tableName)} extends Model\n{\n  use HasFactory;\n\n`;
 
@@ -125,7 +142,7 @@ export default class SqlLaravelGenerator extends BaseGenerator {
         return model;
     }
 
-    toStudlyCase(str) {
+    toStudlyCase(str: string): string {
         return str.replace(/(?:^|_)(\w)/g, (_, c) => (c ? c.toUpperCase() : ''));
     }
 }

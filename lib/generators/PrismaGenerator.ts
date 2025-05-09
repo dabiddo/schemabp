@@ -1,13 +1,12 @@
-// lib/generators/PrismaGenerator.js
 import BaseGenerator from './BaseGenerator'
 import { toSnakeCase, toPascalCase } from '../utils'
 
-export default class PrismaGenerator extends BaseGenerator {
-    constructor(parsedJsonLd) {
+export default class PrismaGenerator extends BaseGenerator<string> {
+    constructor(parsedJsonLd: Record<string, any>) {
         super(parsedJsonLd)
     }
 
-    generateCode() {
+    override generateCode(): string {
         const models = this.parseJsonLd(this.parsedJsonLd)
         let generatedCode = ''
 
@@ -15,7 +14,7 @@ export default class PrismaGenerator extends BaseGenerator {
             const pascalCaseModel = toPascalCase(model)
 
             const modelClass = `model ${pascalCaseModel} {
-  id         Int      @id @default(autoincrement())
+  id    Int    @id @default(autoincrement())
   ${fields.map(field => this.formatPrismaField(field)).join('\n  ')}
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
@@ -26,16 +25,15 @@ export default class PrismaGenerator extends BaseGenerator {
         return generatedCode
     }
 
-    formatPrismaField(field) {
-        // Convert Laravel's table->string("field") to Prisma's string representation
+    formatPrismaField(field: string): string {
         const fieldName = field.split('"')[1]
         return `${fieldName} String`
     }
 
-    parseJsonLd(jsonLd) {
-        const models = new Map()
+    parseJsonLd(jsonLd: Record<string, any>): Map<string, string[]> {
+        const models = new Map<string, string[]>()
 
-        const parseNode = (node, parentName) => {
+        const parseNode = (node: any, parentName?: string): void => {
             if (typeof node === 'object' && !Array.isArray(node)) {
                 const nodeType = node['@type']
                 if (nodeType) {
@@ -43,8 +41,7 @@ export default class PrismaGenerator extends BaseGenerator {
                     if (!models.has(modelName)) models.set(modelName, [])
                     Object.keys(node).forEach(key => {
                         if (key !== '@type') {
-                            //const snakeCaseKey = toSnakeCase(key)
-                            models.get(modelName).push(`$table->string("${key}");`)
+                            models.get(modelName)?.push(`$table->string("${key}");`)
                             parseNode(node[key], modelName)
                         }
                     })

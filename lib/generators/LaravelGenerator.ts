@@ -1,13 +1,18 @@
-// lib/generators/LaravelGenerator.js
+// lib/generators/LaravelGenerator.ts
 import BaseGenerator from './BaseGenerator'
 import { toSnakeCase, toPascalCase } from '../utils'
 
-export default class LaravelGenerator extends BaseGenerator {
-    constructor(parsedJsonLd) {
+interface ModelOutput {
+    model: string;
+    migration: string;
+}
+
+export default class LaravelGenerator extends BaseGenerator<ModelOutput[]> {
+    constructor(parsedJsonLd: Record<string, any>) {
         super(parsedJsonLd)
     }
 
-    determineColumnType(value) {
+    determineColumnType(value: any): string {
         if (typeof value === 'boolean') {
             return 'boolean'
         } else if (typeof value === 'number') {
@@ -21,9 +26,9 @@ export default class LaravelGenerator extends BaseGenerator {
         }
     }
 
-    generateCode() {
+    override generateCode(): ModelOutput[] {
         const models = this.parseJsonLd(this.parsedJsonLd);
-        const generatedCodeArray = [];
+        const generatedCodeArray: ModelOutput[] = [];
 
         for (const [model, fields] of models.entries()) {
             const pascalCaseModel = toPascalCase(model);
@@ -31,7 +36,11 @@ export default class LaravelGenerator extends BaseGenerator {
             // Filter out foreign keys from fillable
             const fillableFields = fields
                 .filter(field => !field.includes('foreignId'))
-                .map(field => field.match(/"([^"]+)"/)[1]);
+                .map(field => {
+                    const match = field.match(/"([^"]+)"/);
+                    return match ? match[1] : '';
+                })
+                .filter(Boolean);
 
             const modelClass = `<?php
 
@@ -62,7 +71,7 @@ export default class LaravelGenerator extends BaseGenerator {
         {
             Schema::create('${toSnakeCase(model)}s', function (Blueprint $table) {
                 $table->id();
-                ${fields.join('\n                ')}
+                ${fields.join('\n            ')}
                 $table->timestamps();
             });
         }
@@ -83,24 +92,24 @@ export default class LaravelGenerator extends BaseGenerator {
         return generatedCodeArray;
     }
 
-    parseJsonLd(jsonLd) {
-        const models = new Map()
+    parseJsonLd(jsonLd: Record<string, any>): Map<string, string[]> {
+        const models = new Map<string, string[]>();
 
-        const parseNode = (node, parentName) => {
+        const parseNode = (node: any, parentName?: string): void => {
             if (typeof node === 'object' && !Array.isArray(node)) {
                 const nodeType = node['@type']
                 if (nodeType) {
                     const modelName = toSnakeCase(nodeType)
                     if (parentName) {
                         if (!models.has(parentName)) models.set(parentName, [])
-                        models.get(parentName).push(`$table->foreignId("${toSnakeCase(nodeType)}_id")->constrained()->onDelete("cascade");`)
+                        models.get(parentName)?.push(`$table->foreignId("${toSnakeCase(nodeType)}_id")->constrained()->onDelete("cascade");`);
                     }
                     if (!models.has(modelName)) models.set(modelName, [])
                     Object.keys(node).forEach(key => {
                         if (key !== '@type' && key !== '@context') {
                             const snakeCaseKey = toSnakeCase(key)
                             const columnType = this.determineColumnType(node[key])
-                            models.get(modelName).push(`$table->${columnType}("${snakeCaseKey}");`)
+                            models.get(modelName)?.push(`$table->${columnType}("${snakeCaseKey}");`);
                             parseNode(node[key], modelName)
                         }
                     })
