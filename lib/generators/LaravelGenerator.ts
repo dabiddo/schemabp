@@ -1,11 +1,7 @@
 // lib/generators/LaravelGenerator.ts
 import BaseGenerator from './BaseGenerator'
 import { toSnakeCase, toPascalCase } from '../utils'
-
-interface ModelOutput {
-    model: string;
-    migration: string;
-}
+import type { ModelOutput } from '~/types'
 
 export default class LaravelGenerator extends BaseGenerator<ModelOutput[]> {
     constructor(parsedJsonLd: Record<string, any>) {

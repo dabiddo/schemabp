@@ -1,9 +1,7 @@
 import SchemaBP from '../lib/schemaBP'
 
-interface ModelOutput {
-  model: string;
-  migration: string;
-}
+import type { ModelOutput } from '~/types';
+
 
 export const useSchemaBP = (parsedJsonLd: any) => {
   const schemabp = new SchemaBP(parsedJsonLd)

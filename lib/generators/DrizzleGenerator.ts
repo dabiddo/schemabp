@@ -1,11 +1,8 @@
 // lib/generators/DrizzleGenerator.ts
 import BaseGenerator from './BaseGenerator';
 import { toPascalCase } from '../utils';
+import type { Field } from '~/types';
 
-interface Field {
-    name: string;
-    type: string;
-}
 
 export default class DrizzleGenerator extends BaseGenerator {
     constructor(parsedJsonLd: Record<string, any>) {

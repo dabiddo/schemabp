@@ -1,18 +1,5 @@
 import BaseGenerator from './BaseGenerator';
-import { toSnakeCase, toPascalCase } from '../utils';
-
-interface Column {
-    name: string;
-    type: string;
-    length: string | null;
-    nullable: boolean;
-    unique: boolean;
-}
-
-interface ModelOutput {
-    model: string;
-    migration: string;
-}
+import type { ModelOutput, Column } from '~/types'
 
 export default class SqlLaravelGenerator extends BaseGenerator<ModelOutput[]> {
     private sqlCreateTable: string;

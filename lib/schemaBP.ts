@@ -4,10 +4,7 @@ import DrizzleGenerator from './generators/DrizzleGenerator'
 import SqlLaravelGenerator from './generators/SqlLaravelGenerator'
 import PhpDtoGenerator from './generators/PhpDtoGenerator'
 
-interface ModelOutput {
-    model: string;
-    migration: string;
-}
+import type { ModelOutput } from '~/types'
 
 export default class SchemaBP {
     private parsedJsonLd: Record<string, any>;
