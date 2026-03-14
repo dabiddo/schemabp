@@ -1,4 +1,4 @@
-FROM node:20.12.2-bookworm-slim 
+FROM node:24.14-trixie-slim 
 
 # Install necessary packages
 RUN apt-get update && apt-get install -y --no-install-recommends \
