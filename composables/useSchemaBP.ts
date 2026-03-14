@@ -1,20 +1,23 @@
 import SchemaBP from '../lib/schemaBP'
-
+import { useSchemaParser } from './useSchemaParser'
 import type { ModelOutput } from '~/types';
 
 
-export const useSchemaBP = (parsedJsonLd: any) => {
-  const schemabp = new SchemaBP(parsedJsonLd)
+export const useSchemaBP = () => {
+  const { parse } = useSchemaParser()
 
-  const toLaravelCode = (): ModelOutput[] => schemabp.toLaravelCode()
-  const toPhpDtoCode = (): string[] => schemabp.toPhpDtoCode()
-  const toPrismaCode = (): string => schemabp.toPrismaCode()
-  const toDrizzleCode = (): string => schemabp.toDrizzleCode()
-  const sqlToLaravelCode = (): ModelOutput[] => {
-    // For SQL to Laravel, we need to pass the SQL string directly
-    // parsedJsonLd in this case is actually the SQL string
-    return schemabp.sqlToLaravelCode(parsedJsonLd)
+  const getGenerators = (rawInput: string) => {
+    // 1. Parse/Flatten the input once
+    const normalizedSchema = parse(rawInput)
+
+    // 2. Pass the clean schema to the BP logic
+    const schemabp = new SchemaBP(normalizedSchema)
+
+    return {
+      toPhpDtoCode: () => schemabp.toPhpDtoCode(),
+      // toLaravelCode: () => schemabp.toLaravelCode(), etc.
+    }
   }
 
-  return { toLaravelCode, toPhpDtoCode, toPrismaCode, toDrizzleCode, sqlToLaravelCode }
+  return { getGenerators }
 }

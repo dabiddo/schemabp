@@ -34,12 +34,12 @@
 import { ref } from 'vue'
 import { useSchemaParser } from '~/composables/useSchemaParser'
 
+const {parse} = useSchemaParser()
 const jsonLdInput = ref('')
 const phpDto = ref([])
 
 const generatePhpDtoCode = () => {
-  const parsedJsonLd = JSON.parse(jsonLdInput.value)
-  const { toPhpDtoCode } = useSchemaParser(parsedJsonLd)
-  phpDto.value = toPhpDtoCode()
+  const schema = parse(jsonLdInput.value)
+  phpDto.value = schema
 }
 </script>

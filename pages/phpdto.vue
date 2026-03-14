@@ -31,15 +31,16 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-import { useSchemaBP } from '~/composables/useSchemaBP'
-
+const { getGenerators } = useSchemaBP()
 const jsonLdInput = ref('')
-const phpDto = ref([])
+const phpDto = ref<string[]>([])
 
 const generatePhpDtoCode = () => {
-  const parsedJsonLd = JSON.parse(jsonLdInput.value)
-  const { toPhpDtoCode } = useSchemaBP(parsedJsonLd)
-  phpDto.value = toPhpDtoCode()
+  try {
+    const generators = getGenerators(jsonLdInput.value)
+    phpDto.value = generators.toPhpDtoCode()
+  } catch (e) {
+    alert("Parsing failed: " + e.message)
+  }
 }
 </script>

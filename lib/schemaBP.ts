@@ -4,37 +4,48 @@ import DrizzleGenerator from './generators/DrizzleGenerator'
 import SqlLaravelGenerator from './generators/SqlLaravelGenerator'
 import PhpDtoGenerator from './generators/PhpDtoGenerator'
 
-import type { ModelOutput } from '~/types'
+import type { ModelOutput, ParserSchema } from '~/types'
 
 export default class SchemaBP {
-    private parsedJsonLd: Record<string, any>;
+    //private parsedJsonLd: Record<string, any>;
 
-    constructor(parsedJsonLd: Record<string, any>) {
-        this.parsedJsonLd = parsedJsonLd;
-    }
+    private schema: ParserSchema;
 
-    toLaravelCode(): ModelOutput[] {
-        const generator = new LaravelGenerator(this.parsedJsonLd);
-        return generator.generateCode();
+    constructor(schema: ParserSchema) {
+        this.schema = schema;
     }
 
     toPhpDtoCode(): string[] {
-        const generator = new PhpDtoGenerator(this.parsedJsonLd);
+        const generator = new PhpDtoGenerator(this.schema);
         return generator.generateCode();
     }
 
-    toPrismaCode(): string {
-        const generator = new PrismaGenerator(this.parsedJsonLd);
-        return generator.generateCode();
-    }
+    /*constructor(parsedJsonLd: Record<string, any>) {
+        this.parsedJsonLd = parsedJsonLd;
+    }*/
 
-    toDrizzleCode(): string {
-        const generator = new DrizzleGenerator(this.parsedJsonLd);
-        return generator.generateCode();
-    }
-
-    sqlToLaravelCode(sql: string): ModelOutput[] {
-        const generator = new SqlLaravelGenerator(sql);
-        return generator.generateCode();
-    }
+    /*    toLaravelCode(): ModelOutput[] {
+            const generator = new LaravelGenerator(this.parsedJsonLd);
+            return generator.generateCode();
+        }
+    
+        toPhpDtoCode(): string[] {
+            const generator = new PhpDtoGenerator(this.parsedJsonLd);
+            return generator.generateCode();
+        }
+    
+        toPrismaCode(): string {
+            const generator = new PrismaGenerator(this.parsedJsonLd);
+            return generator.generateCode();
+        }
+    
+        toDrizzleCode(): string {
+            const generator = new DrizzleGenerator(this.parsedJsonLd);
+            return generator.generateCode();
+        }
+    
+        sqlToLaravelCode(sql: string): ModelOutput[] {
+            const generator = new SqlLaravelGenerator(sql);
+            return generator.generateCode();
+        }*/
 }

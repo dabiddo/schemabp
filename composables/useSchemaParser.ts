@@ -1,5 +1,6 @@
-import { toSnakeCase, toPascalCase } from '../lib/utils'
+//import { toSnakeCase, toPascalCase } from '../lib/utils'
 import type { ParserSchema, ParserField } from '~/types'
+import { snakeCase, pascalCase } from 'scule'
 
 export const useSchemaParser = () => {
     const parse = (rawInput: string): ParserSchema => {
@@ -18,7 +19,7 @@ export const useSchemaParser = () => {
                         flatten(value, currentKey)
                     } else {
                         fields.push({
-                            key: toSnakeCase(currentKey),
+                            key: snakeCase(currentKey),
                             originalKey: key,
                             type: inferType(value, key),
                             value: value
@@ -30,7 +31,7 @@ export const useSchemaParser = () => {
             flatten(json)
 
             return {
-                name: toPascalCase(entityName),
+                name: pascalCase(entityName),
                 fields
             }
         } catch (e) {
