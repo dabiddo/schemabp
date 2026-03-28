@@ -1,21 +1,3 @@
-export interface ModelOutput {
-    model: string;
-    migration: string;
-}
-
-export interface Column {
-    name: string;
-    type: string;
-    length: string | null;
-    nullable: boolean;
-    unique: boolean;
-}
-
-export interface Field {
-    name: string;
-    type: string;
-}
-
 export type ParserField = {
     key: string;
     originalKey: string;
@@ -27,4 +9,10 @@ export type ParserField = {
 export type ParserSchema = {
     name: string;
     fields: ParserField[];
+}
+
+export type ModelOutput = {
+    name: string;
+    model: string;
+    migration: string;
 }

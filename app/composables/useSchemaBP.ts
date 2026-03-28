@@ -1,6 +1,6 @@
-import SchemaBP from '../lib/schemaBP'
+import SchemaBP from '~/lib/schemaBP'
 import { useSchemaParser } from './useSchemaParser'
-import type { ModelOutput } from '~/types';
+//import type { ModelOutput } from '~/types';
 
 
 export const useSchemaBP = () => {
@@ -15,7 +15,7 @@ export const useSchemaBP = () => {
 
     return {
       toPhpDtoCode: () => schemabp.toPhpDtoCode(),
-      // toLaravelCode: () => schemabp.toLaravelCode(), etc.
+      toLaravelCode: () => schemabp.toLaravelCode(),
     }
   }
 

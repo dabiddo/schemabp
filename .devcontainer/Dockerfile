@@ -1,6 +1,6 @@
-FROM node:24.14-trixie-slim 
+FROM node:22.17.1-bookworm-slim 
 
-# Install necessary packages
+# Update package lists and install pnpm globally
 RUN apt-get update && apt-get install -y --no-install-recommends \
     curl \
     wget \
@@ -13,15 +13,15 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-# Create necessary directories and set permissions
+# Create the /app directory and set ownership to the existing 'node' user and group
 RUN mkdir -p /app \
     && chown -R node:node /app
 
-# Switch to non-root user
+# Switch to the 'node' user
 USER node
 
-# Set working directory
+# Set the working directory to /app
 WORKDIR /app
 
-# Set host environment variable
-ENV HOST=0.0.0.0
+ENV HOST 0.0.0.0
+EXPOSE 3000

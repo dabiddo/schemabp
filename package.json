@@ -1,7 +1,7 @@
 {
-  "name": "nuxt-app",
-  "private": true,
+  "name": "schemabpup",
   "type": "module",
+  "private": true,
   "scripts": {
     "build": "nuxt build",
     "dev": "nuxt dev",
@@ -10,15 +10,12 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
-    "@tailwindcss/vite": "^4.2.1",
     "nuxt": "^4.4.2",
     "scule": "^1.3.0",
-    "tailwindcss": "^4.2.1",
-    "vue": "latest",
-    "vue-router": "latest"
+    "vue": "^3.5.30",
+    "vue-router": "^5.0.3"
   },
   "devDependencies": {
-    "typescript": "^5.9.3",
-    "vue-tsc": "^3.2.5"
+    "@nuxtjs/tailwindcss": "^6.14.0"
   }
 }

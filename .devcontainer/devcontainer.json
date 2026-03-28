@@ -1,5 +1,5 @@
 {
-	"name": "schemabp",
+	"name": "schemabpup",
 	"build": {
 		"dockerfile": "Dockerfile"
 	},
@@ -15,9 +15,10 @@
 			"extensions": [
 				"Nuxtr.nuxt-vscode-extentions",
 				"praburangki.nuxt-snippets",
-				"exer7um.vue-3-vscode-snippets"
+				"exer7um.vue-3-vscode-snippets",
+				"Vue.volar",
+				"MisterJ.vue-volar-extention-pack"
 			]
 		}
-	},
-	"remoteUser": "node"
+	}
 }
