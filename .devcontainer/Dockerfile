@@ -1,6 +1,6 @@
-FROM node:22.17.1-bookworm-slim 
+FROM node:24.13.1-bookworm-slim
 
-# Update package lists and install pnpm globally
+# Install system dependencies & global pnpm
 RUN apt-get update && apt-get install -y --no-install-recommends \
     curl \
     wget \
@@ -8,20 +8,19 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     gzip \
     git \
     ca-certificates \
-    openssh-client \  
+    openssh-client \
+    sudo \
     && npm install -g pnpm \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-# Create the /app directory and set ownership to the existing 'node' user and group
-RUN mkdir -p /app \
-    && chown -R node:node /app
+# Fix permissions for app directory, node home, and Zed remote server directories
+RUN mkdir -p /app /home/node/.local /home/node/.zed-server /tmp \
+    && chown -R node:node /app /home/node /tmp
 
-# Switch to the 'node' user
 USER node
-
-# Set the working directory to /app
 WORKDIR /app
 
-ENV HOST 0.0.0.0
-EXPOSE 3000
+ENV HOST=0.0.0.0
+ENV PORT=3001
+EXPOSE 3001
