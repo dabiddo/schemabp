@@ -9,6 +9,7 @@ A simple web-based tool to convert between different schema formats. Built with 
 ## What it does
 
 Converts between:
+
 - JSON-LD → Laravel (Migrations & Models)
 - JSON-LD → PHP DTOs
 - JSON-LD → Drizzle ORM Schemas
@@ -18,6 +19,7 @@ Converts between:
 ## Important Note
 
 This is a side project built for fun and personal use. While it works for basic conversions, there's no official support or guarantees. Feel free to:
+
 - Use it if it helps
 - Submit PRs if you want to improve something
 - Fork it and make it your own
@@ -29,4 +31,5 @@ This is a side project built for fun and personal use. While it works for basic 
 pnpm install
 
 # Run dev server
-pnpm dev
+pnpm dev --host
+```

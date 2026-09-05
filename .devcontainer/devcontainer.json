@@ -1,5 +1,7 @@
 {
-	"name": "schemabp",
+	"name": "schemabpup",
+	"remoteUser": "node",
+  "containerUser": "node",
 	"build": {
 		"dockerfile": "Dockerfile"
 	},
@@ -8,16 +10,20 @@
 		"ghcr.io/devcontainers/features/sshd:1": {}
 	},
 	"forwardPorts": [
-		3000
+		3001
 	],
 	"customizations": {
+    "zed": {
+                "extensions": ["vue", "html", "emmet"]
+            },
 		"vscode": {
 			"extensions": [
 				"Nuxtr.nuxt-vscode-extentions",
 				"praburangki.nuxt-snippets",
-				"exer7um.vue-3-vscode-snippets"
+				"exer7um.vue-3-vscode-snippets",
+				"Vue.volar",
+				"MisterJ.vue-volar-extention-pack"
 			]
 		}
-	},
-	"remoteUser": "node"
+	}
 }
